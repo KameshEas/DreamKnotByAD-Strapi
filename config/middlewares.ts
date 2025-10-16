@@ -18,7 +18,6 @@ export default [
           ],
           'script-src': [
             "'self'",
-            'example.com',
             'https://media-library.cloudinary.com',
             'https://upload-widget.cloudinary.com',
             'https://console.cloudinary.com',

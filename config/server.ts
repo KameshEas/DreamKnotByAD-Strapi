@@ -5,5 +5,5 @@ export default ({ env }) => ({
     keys: env.array('APP_KEYS'),
   },
   url: env('RENDER_EXTERNAL_URL', 'https://dreamknottbyad-strapi.onrender.com'),
-  proxy: true, 
+  proxy: true,
 });
