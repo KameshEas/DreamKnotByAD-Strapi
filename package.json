@@ -5,7 +5,8 @@
   "private": true,
   "description": "A Strapi application",
   "scripts": {
-    "build": "strapi build",
+  "build": "strapi build",
+  "postbuild": "node ./scripts/copy-middlewares.js",
     "console": "strapi console",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
