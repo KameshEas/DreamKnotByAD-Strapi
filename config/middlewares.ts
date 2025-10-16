@@ -1,4 +1,10 @@
 export default [
+  // ✅ Trust proxy headers early (critical for Render HTTPS)
+  async (ctx, next) => {
+    ctx.request.header['x-forwarded-proto'] = ctx.request.header['x-forwarded-proto'] || 'https';
+    await next();
+  },
+
   'strapi::logger',
   'strapi::errors',
   {
