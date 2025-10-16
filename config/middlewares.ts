@@ -1,8 +1,22 @@
+const fs = require('fs');
 const path = require('path');
 
+// Try several likely locations for the middleware so this works locally and on deploy platforms like Render
+const candidates = [
+  path.resolve(__dirname, '..', 'dist', 'middlewares', 'https-redirect.js'),
+  path.resolve(__dirname, '..', 'dist', 'src', 'middlewares', 'https-redirect.js'),
+  path.resolve(__dirname, '..', 'src', 'middlewares', 'https-redirect.js'),
+  path.resolve(__dirname, '..', 'middlewares', 'https-redirect.js'),
+];
+
+let middlewarePath = candidates.find((p) => fs.existsSync(p));
+if (!middlewarePath) {
+  // fallback to a relative resolve which Strapi will try to resolve from dist root
+  middlewarePath = 'middlewares/https-redirect.js';
+}
+
 module.exports = [
-  // Resolve to the source middleware file so it can be loaded both in dev and in built (dist) environments
-  { resolve: path.resolve(__dirname, '..', 'src', 'middlewares', 'https-redirect.js') },
+  { resolve: middlewarePath },
 
   'strapi::logger',
   'strapi::errors',
