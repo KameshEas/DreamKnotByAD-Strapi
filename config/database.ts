@@ -1,6 +1,8 @@
 import path from 'path';
 
-export default ({ env }) => {
+type EnvHelper = (key: string, defaultValue?: any) => any;
+
+export default ({ env }: { env: EnvHelper & { int: EnvHelper; bool: EnvHelper; array?: EnvHelper } }) => {
   const client = env('DATABASE_CLIENT', 'sqlite');
 
   const connections = {
@@ -11,17 +13,22 @@ export default ({ env }) => {
         database: env('DATABASE_NAME'),
         user: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
-        ssl: env.bool('DATABASE_SSL') && {
-          key: env('DATABASE_SSL_KEY'),
-          cert: env('DATABASE_SSL_CERT'),
-          ca: env('DATABASE_SSL_CA'),
-          capath: env('DATABASE_SSL_CAPATH'),
-          cipher: env('DATABASE_SSL_CIPHER'),
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED'),
-        },
+        ssl:
+          env.bool('DATABASE_SSL') && {
+            key: env('DATABASE_SSL_KEY'),
+            cert: env('DATABASE_SSL_CERT'),
+            ca: env('DATABASE_SSL_CA'),
+            capath: env('DATABASE_SSL_CAPATH'),
+            cipher: env('DATABASE_SSL_CIPHER'),
+            rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED'),
+          },
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+      pool: {
+        min: env.int('DATABASE_POOL_MIN', 2),
+        max: env.int('DATABASE_POOL_MAX', 10),
+      },
     },
+
     postgres: {
       connection: {
         connectionString: env('DATABASE_URL'),
@@ -30,21 +37,26 @@ export default ({ env }) => {
         database: env('DATABASE_NAME'),
         user: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
-        ssl: env.bool('DATABASE_SSL') && {
-          key: env('DATABASE_SSL_KEY'),
-          cert: env('DATABASE_SSL_CERT'),
-          ca: env('DATABASE_SSL_CA'),
-          capath: env('DATABASE_SSL_CAPATH'),
-          cipher: env('DATABASE_SSL_CIPHER'),
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED'),
-        },
+        ssl:
+          env.bool('DATABASE_SSL') && {
+            key: env('DATABASE_SSL_KEY'),
+            cert: env('DATABASE_SSL_CERT'),
+            ca: env('DATABASE_SSL_CA'),
+            capath: env('DATABASE_SSL_CAPATH'),
+            cipher: env('DATABASE_SSL_CIPHER'),
+            rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED'),
+          },
         schema: env('DATABASE_SCHEMA', 'public'),
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+      pool: {
+        min: env.int('DATABASE_POOL_MIN', 2),
+        max: env.int('DATABASE_POOL_MAX', 10),
+      },
     },
+
     sqlite: {
       connection: {
-        filename: path.join(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
+        filename: path.resolve(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
       },
       useNullAsDefault: true,
     },

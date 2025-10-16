@@ -1,8 +1,5 @@
-export default [
-  // 👇 reference the custom middleware by name
-  {
-    name: 'global::https-redirect',
-  },
+module.exports = [
+  { resolve: 'middlewares/https-redirect.js' },
 
   'strapi::logger',
   'strapi::errors',

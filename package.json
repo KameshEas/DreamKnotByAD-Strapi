@@ -1,6 +1,7 @@
 {
+  "type": "commonjs",
   "name": "strapi-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "A Strapi application",
   "scripts": {
@@ -17,9 +18,9 @@
   },
   "dependencies": {
     "@strapi-community/cloudinary-media-library": "^1.0.3",
-    "@strapi/plugin-cloud": "5.28.0",
-    "@strapi/plugin-users-permissions": "5.28.0",
-    "@strapi/strapi": "5.28.0",
+    "@strapi/plugin-cloud": "5.26.0",
+    "@strapi/plugin-users-permissions": "5.26.0",
+    "@strapi/strapi": "5.26.0",
     "fs-extra": "^10.0.0",
     "mime-types": "^2.1.27",
     "pg": "8.8.0",
