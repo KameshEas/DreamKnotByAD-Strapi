@@ -1,5 +1,8 @@
+const path = require('path');
+
 module.exports = [
-  { resolve: 'middlewares/https-redirect.js' },
+  // Resolve to the source middleware file so it can be loaded both in dev and in built (dist) environments
+  { resolve: path.resolve(__dirname, '..', 'src', 'middlewares', 'https-redirect.js') },
 
   'strapi::logger',
   'strapi::errors',
