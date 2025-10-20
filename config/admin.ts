@@ -3,7 +3,7 @@ export default ({ env }) => ({
     secret: env('ADMIN_JWT_SECRET'),
     sessions: {
       cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: env.bool('ADMIN_COOKIE_SECURE', false),
         sameSite: 'lax',
       },
     },
