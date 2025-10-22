@@ -6,4 +6,7 @@ export default ({ env }) => ({
   },
   url: env('RENDER_EXTERNAL_URL', 'https://dreamknottbyad-strapi.onrender.com'),
   proxy: true,
+  cron: {
+    enabled: true,
+  },
 });
