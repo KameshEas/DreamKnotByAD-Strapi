@@ -38,7 +38,7 @@ export default ({ env }: { env: EnvHelper & { int: EnvHelper; bool: EnvHelper; a
         user: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
         ssl:
-          env('DATABASE_URL') ? { rejectUnauthorized: false } :
+          env('DATABASE_URL') ? false :
           env.bool('DATABASE_SSL') && {
             key: env('DATABASE_SSL_KEY'),
             cert: env('DATABASE_SSL_CERT'),
