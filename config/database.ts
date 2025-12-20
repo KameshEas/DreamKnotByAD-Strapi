@@ -3,7 +3,7 @@ import path from 'path';
 type EnvHelper = (key: string, defaultValue?: any) => any;
 
 export default ({ env }: { env: EnvHelper & { int: EnvHelper; bool: EnvHelper; array?: EnvHelper } }) => {
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  const client = env('DATABASE_URL') ? 'postgres' : env('DATABASE_CLIENT', 'sqlite');
 
   const connections = {
     mysql: {
@@ -38,6 +38,7 @@ export default ({ env }: { env: EnvHelper & { int: EnvHelper; bool: EnvHelper; a
         user: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
         ssl:
+          env('DATABASE_URL') ? { rejectUnauthorized: false } :
           env.bool('DATABASE_SSL') && {
             key: env('DATABASE_SSL_KEY'),
             cert: env('DATABASE_SSL_CERT'),
