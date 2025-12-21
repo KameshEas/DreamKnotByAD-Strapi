@@ -1,7 +1,4 @@
 export default {
-  'content-type-builder': {
-    enabled: true,
-  },
   'cloudinary-media-library': {
     enabled: true,
     config: {
