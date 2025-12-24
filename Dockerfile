@@ -1,22 +1,22 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Set working directory
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
-# Copy package files first (better layer caching)
+# Copy package files first (better caching)
 COPY package.json package-lock.json* ./
 
-# Install dependencies (including devDependencies for build)
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the app
+# Copy rest of the app
 COPY . .
 
 # Build Strapi admin
 RUN npm run build
 
-# Expose Strapi port
 EXPOSE 1337
 
-# Start Strapi
 CMD ["npm", "run", "start"]
