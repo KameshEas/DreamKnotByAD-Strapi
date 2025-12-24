@@ -1,5 +1,8 @@
 FROM node:20-alpine
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 # Install build dependencies for native modules
 RUN apk add --no-cache python3 make g++
 
