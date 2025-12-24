@@ -1,11 +1,15 @@
 export default ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
-  port: env.int('PORT', process.env.PORT || 10000),
+  host: '0.0.0.0',
+  port: env.int('PORT', 1337),
+
   app: {
     keys: env.array('APP_KEYS'),
   },
-  url: env('RENDER_EXTERNAL_URL', 'https://dreamknottbyad-strapi.onrender.com'),
+
+  url: env('PUBLIC_URL', 'https://api.dreamknot.co.in'),
+
   proxy: true,
+
   cron: {
     enabled: true,
   },
