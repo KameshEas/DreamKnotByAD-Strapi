@@ -43,6 +43,11 @@
     "featured": {
       "type": "boolean",
       "required": false
+    },
+    "delivery_option": {
+      "type": "enumeration",
+      "enum": ["two_day", "standard", "express"],
+      "required": false
     }
   }
 }

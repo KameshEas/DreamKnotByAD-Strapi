@@ -613,6 +613,9 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    delivery_option: Schema.Attribute.Enumeration<
+      ['two_day', 'standard', 'express']
+    >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     featured: Schema.Attribute.Boolean;
     images: Schema.Attribute.Media<'images', true>;
