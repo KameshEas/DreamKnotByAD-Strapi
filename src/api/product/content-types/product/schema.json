@@ -20,9 +20,35 @@
       "type": "text",
       "required": true
     },
-    "base_price": {
+    "original_price": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    "discounted_price": {
+      "type": "decimal",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    "ean": {
+      "type": "string",
+      "required": false,
+      "unique": true,
+      "validation": {
+        "pattern": "^[0-9]{8,13}$"
+      }
+    },
+    "upc": {
+      "type": "string",
+      "required": false,
+      "unique": true,
+      "validation": {
+        "pattern": "^[0-9]{12}$"
+      }
     },
     "images": {
       "type": "media",
@@ -52,7 +78,10 @@
     "stock_quantity": {
       "type": "integer",
       "required": false,
-      "default": 0
+      "default": 0,
+      "validation": {
+        "min": 0
+      }
     },
     "is_available": {
       "type": "boolean",
@@ -61,12 +90,21 @@
     },
     "sku": {
       "type": "string",
-      "required": false,
+      "required": true,
       "unique": true
     },
     "weight": {
       "type": "decimal",
-      "required": false
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    "weight_unit": {
+      "type": "enumeration",
+      "enum": ["kg", "g", "lb", "oz"],
+      "required": false,
+      "default": "g"
     },
     "dimensions": {
       "type": "text",
@@ -75,7 +113,88 @@
     "low_stock_threshold": {
       "type": "integer",
       "required": false,
-      "default": 5
+      "default": 5,
+      "validation": {
+        "min": 0
+      }
+    },
+    "allow_backorders": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "track_inventory": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-review.product-review",
+      "inversedBy": "product"
+    },
+    "averageRating": {
+      "type": "decimal",
+      "required": false,
+      "default": 0,
+      "validation": {
+        "min": 0,
+        "max": 5
+      }
+    },
+    "reviewCount": {
+      "type": "integer",
+      "required": false,
+      "default": 0,
+      "validation": {
+        "min": 0
+      }
+    },
+    "ratingCount": {
+      "type": "json",
+      "required": false,
+      "default": "{\"1\": 0, \"2\": 0, \"3\": 0, \"4\": 0, \"5\": 0}"
+    },
+    "product_type": {
+      "type": "enumeration",
+      "enum": ["physical", "digital", "service"],
+      "required": false,
+      "default": "physical"
+    },
+    "digital_file": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    },
+    "requires_shipping": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "taxable": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "tags": {
+      "type": "text",
+      "required": false
+    },
+    "meta_description": {
+      "type": "text",
+      "required": false
+    },
+    "meta_keywords": {
+      "type": "text",
+      "required": false
+    },
+    "discount_codes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::discount-code.discount-code",
+      "inversedBy": "applies_to_products"
     }
   }
 }

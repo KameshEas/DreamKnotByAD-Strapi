@@ -26,26 +26,53 @@
       "type": "decimal",
       "required": true
     },
-    "payment_status": {
-      "type": "enumeration",
-      "enum": ["pending", "paid", "failed"],
-      "default": "pending",
+    "subtotal": {
+      "type": "decimal",
       "required": true
     },
-    "order_status": {
-      "type": "enumeration",
-      "enum": ["pending", "processing", "in_production", "shipped", "delivered", "cancelled"],
-      "default": "pending",
+    "tax_amount": {
+      "type": "decimal",
       "required": true
     },
-    "discount_code": {
-      "type": "string",
-      "required": false
+    "shipping_amount": {
+      "type": "decimal",
+      "required": false,
+      "default": 0
     },
     "discount_amount": {
       "type": "decimal",
       "required": false,
       "default": 0
+    },
+    "discount_code": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discount-code.discount-code",
+      "inversedBy": "orders"
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": ["pending", "paid", "failed", "refunded"],
+      "default": "pending",
+      "required": true
+    },
+    "order_status": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "processing", "in_production", "quality_check", "shipped", "out_for_delivery", "delivered", "cancelled", "returned", "refunded"],
+      "default": "pending",
+      "required": true
+    },
+    "order_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "estimated_delivery_date": {
+      "type": "datetime",
+      "required": false
+    },
+    "actual_delivery_date": {
+      "type": "datetime",
+      "required": false
     },
     "shipping_address": {
       "type": "text",
@@ -63,11 +90,66 @@
       "type": "string",
       "required": false
     },
+    "payment_method": {
+      "type": "enumeration",
+      "enum": ["razorpay", "cod", "paypal", "stripe", "bank_transfer"],
+      "required": false
+    },
+    "payment_transaction_id": {
+      "type": "string",
+      "required": false
+    },
     "tracking_number": {
       "type": "string",
       "required": false
     },
+    "tracking_url": {
+      "type": "string",
+      "required": false
+    },
+    "tracking_status": {
+      "type": "text",
+      "required": false
+    },
+    "order_source": {
+      "type": "enumeration",
+      "enum": ["web", "mobile", "api", "admin_panel"],
+      "required": false
+    },
+    "abandoned_cart": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "abandoned_cart_reason": {
+      "type": "enumeration",
+      "enum": ["cart_timeout", "payment_failed", "user_left", "price_changed"],
+      "required": false
+    },
     "notes": {
+      "type": "text",
+      "required": false
+    },
+    "order_history": {
+      "type": "json",
+      "required": false,
+      "default": "[]"
+    },
+    "return_policy_applied": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "return_date": {
+      "type": "datetime",
+      "required": false
+    },
+    "refunded_amount": {
+      "type": "decimal",
+      "required": false,
+      "default": 0
+    },
+    "refund_reason": {
       "type": "text",
       "required": false
     }

@@ -1,0 +1,86 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_reviews",
+  "info": {
+    "singularName": "product-review",
+    "pluralName": "product-reviews",
+    "displayName": "Product Review",
+    "description": "Customer reviews and ratings for products"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rating": {
+      "type": "decimal",
+      "required": true,
+      "min": 1,
+      "max": 5,
+      "validation": {
+        "min": 1,
+        "max": 5
+      }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "minLength": 5,
+      "maxLength": 100
+    },
+    "review_text": {
+      "type": "text",
+      "required": true,
+      "minLength": 10,
+      "maxLength": 2000
+    },
+    "pros": {
+      "type": "text",
+      "required": false,
+      "maxLength": 500
+    },
+    "cons": {
+      "type": "text",
+      "required": false,
+      "maxLength": 500
+    },
+    "helpful_votes": {
+      "type": "integer",
+      "required": false,
+      "default": 0
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "product_reviews"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "reviews"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "rejected"],
+      "default": "pending",
+      "required": true
+    },
+    "review_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "verified_purchase": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

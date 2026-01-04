@@ -664,7 +664,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    base_price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -674,6 +673,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     dimensions: Schema.Attribute.Text;
+    discounted_price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     featured: Schema.Attribute.Boolean;
     images: Schema.Attribute.Media<'images', true>;
     is_available: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
@@ -685,6 +685,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     low_stock_threshold: Schema.Attribute.Integer &
       Schema.Attribute.DefaultTo<5>;
+    original_price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     sku: Schema.Attribute.String & Schema.Attribute.Unique;
     slug: Schema.Attribute.UID<'title'>;

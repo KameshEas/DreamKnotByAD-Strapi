@@ -1,0 +1,130 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discount_codes",
+  "info": {
+    "singularName": "discount-code",
+    "pluralName": "discount-codes",
+    "displayName": "Discount Code",
+    "description": "Discount codes and promotions for orders"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "code": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "validation": {
+        "minLength": 3,
+        "maxLength": 20,
+        "pattern": "^[A-Z0-9]+$"
+      }
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "discount_type": {
+      "type": "enumeration",
+      "enum": ["percentage", "fixed_amount"],
+      "required": true,
+      "default": "percentage"
+    },
+    "discount_value": {
+      "type": "decimal",
+      "required": true,
+      "validation": {
+        "min": 0
+      }
+    },
+    "minimum_order_value": {
+      "type": "decimal",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    "maximum_discount": {
+      "type": "decimal",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    "usage_limit": {
+      "type": "integer",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    "usage_count": {
+      "type": "integer",
+      "required": false,
+      "default": 0,
+      "validation": {
+        "min": 0
+      }
+    },
+    "valid_from": {
+      "type": "datetime",
+      "required": false
+    },
+    "valid_until": {
+      "type": "datetime",
+      "required": false
+    },
+    "is_active": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "applies_to": {
+      "type": "enumeration",
+      "enum": ["all_products", "specific_products", "categories"],
+      "required": true,
+      "default": "all_products"
+    },
+    "applies_to_products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "inversedBy": "discount_codes"
+    },
+    "applies_to_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "inversedBy": "discount_codes"
+    },
+    "customer_limit": {
+      "type": "integer",
+      "required": false,
+      "validation": {
+        "min": 0
+      }
+    },
+    "customer_usage_count": {
+      "type": "json",
+      "required": false,
+      "default": "{}"
+    },
+    "exclude_sale_items": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "free_shipping": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    }
+  }
+}
