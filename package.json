@@ -21,6 +21,7 @@
     "@strapi-community/cloudinary-media-library": "^1.0.3",
     "@strapi/plugin-cloud": "5.33.0",
     "@strapi/plugin-users-permissions": "5.33.0",
+    "@strapi/provider-upload-cloudinary": "^5.33.1",
     "@strapi/sdk-js": "^1.0.0",
     "@strapi/strapi": "5.33.0",
     "better-sqlite3": "^12.5.0",

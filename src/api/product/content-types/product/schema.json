@@ -48,6 +48,34 @@
       "type": "enumeration",
       "enum": ["two_day", "standard", "express"],
       "required": false
+    },
+    "stock_quantity": {
+      "type": "integer",
+      "required": false,
+      "default": 0
+    },
+    "is_available": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "sku": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "weight": {
+      "type": "decimal",
+      "required": false
+    },
+    "dimensions": {
+      "type": "text",
+      "required": false
+    },
+    "low_stock_threshold": {
+      "type": "integer",
+      "required": false,
+      "default": 5
     }
   }
 }

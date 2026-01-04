@@ -1,5 +1,21 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface OrderOrderItem extends Struct.ComponentSchema {
+  collectionName: 'components_order_order_items';
+  info: {
+    description: '';
+    displayName: 'Order Item';
+  };
+  attributes: {
+    customization: Schema.Attribute.Text;
+    price: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
+    quantity: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<1>;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -65,6 +81,7 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'order.order-item': OrderOrderItem;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;

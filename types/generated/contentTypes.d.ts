@@ -596,6 +596,62 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    description: 'E-commerce orders';
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    billing_address: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    discount_amount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    discount_code: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    notes: Schema.Attribute.Text;
+    order_items: Schema.Attribute.Component<'order.order-item', true>;
+    order_status: Schema.Attribute.Enumeration<
+      [
+        'pending',
+        'processing',
+        'in_production',
+        'shipped',
+        'delivered',
+        'cancelled',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    payment_status: Schema.Attribute.Enumeration<
+      ['pending', 'paid', 'failed']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    publishedAt: Schema.Attribute.DateTime;
+    razorpay_order_id: Schema.Attribute.String;
+    razorpay_payment_id: Schema.Attribute.String;
+    shipping_address: Schema.Attribute.Text & Schema.Attribute.Required;
+    total_amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    tracking_number: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -617,20 +673,27 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       ['two_day', 'standard', 'express']
     >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
+    dimensions: Schema.Attribute.Text;
     featured: Schema.Attribute.Boolean;
     images: Schema.Attribute.Media<'images', true>;
+    is_available: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
     > &
       Schema.Attribute.Private;
+    low_stock_threshold: Schema.Attribute.Integer &
+      Schema.Attribute.DefaultTo<5>;
     publishedAt: Schema.Attribute.DateTime;
+    sku: Schema.Attribute.String & Schema.Attribute.Unique;
     slug: Schema.Attribute.UID<'title'>;
+    stock_quantity: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    weight: Schema.Attribute.Decimal;
   };
 }
 
@@ -1149,6 +1212,7 @@ declare module '@strapi/strapi' {
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::global.global': ApiGlobalGlobal;
+      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

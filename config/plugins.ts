@@ -1,10 +1,16 @@
 export default {
+  upload: {
+    config: {
+      provider: 'cloudinary',
+      providerOptions: {
+        cloud_name: process.env.CLOUDINARY_NAME,
+        api_key: process.env.CLOUDINARY_KEY,
+        api_secret: process.env.CLOUDINARY_SECRET,
+      },
+    },
+  },
+
   'cloudinary-media-library': {
     enabled: true,
-    config: {
-      cloudName: 'DreamKnot',
-      apiKey: '154841424944738',
-      encryptionKey: 'fC_rGiwzR2K3HY-Q36BamMcTadA',
-    },
   },
 };

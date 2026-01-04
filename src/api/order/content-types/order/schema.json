@@ -1,0 +1,75 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": "E-commerce orders"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "order_items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "order.order-item"
+    },
+    "total_amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": ["pending", "paid", "failed"],
+      "default": "pending",
+      "required": true
+    },
+    "order_status": {
+      "type": "enumeration",
+      "enum": ["pending", "processing", "in_production", "shipped", "delivered", "cancelled"],
+      "default": "pending",
+      "required": true
+    },
+    "discount_code": {
+      "type": "string",
+      "required": false
+    },
+    "discount_amount": {
+      "type": "decimal",
+      "required": false,
+      "default": 0
+    },
+    "shipping_address": {
+      "type": "text",
+      "required": true
+    },
+    "billing_address": {
+      "type": "text",
+      "required": true
+    },
+    "razorpay_order_id": {
+      "type": "string",
+      "required": false
+    },
+    "razorpay_payment_id": {
+      "type": "string",
+      "required": false
+    },
+    "tracking_number": {
+      "type": "string",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  }
+}
