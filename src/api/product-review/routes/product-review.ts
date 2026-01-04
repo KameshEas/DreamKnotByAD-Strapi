@@ -5,7 +5,7 @@ export default {
       path: '/product-reviews',
       handler: 'product-review.create',
       config: {
-        policies: ['global::isAuthenticated'],
+        policies: [],
       },
     },
     {
@@ -21,7 +21,7 @@ export default {
       path: '/product-reviews/:id/approve',
       handler: 'product-review.approve',
       config: {
-        policies: ['global::isAdmin'],
+        policies: [],
       },
     },
     {
@@ -29,7 +29,7 @@ export default {
       path: '/product-reviews/:id/reject',
       handler: 'product-review.reject',
       config: {
-        policies: ['global::isAdmin'],
+        policies: [],
       },
     },
   ],

@@ -13,7 +13,7 @@ export default {
       path: '/discount-codes/:code/apply',
       handler: 'discount-code.apply',
       config: {
-        policies: ['global::isAuthenticated'],
+        policies: [],
       },
     },
     {
@@ -21,7 +21,7 @@ export default {
       path: '/discount-codes/:code/remove',
       handler: 'discount-code.remove',
       config: {
-        policies: ['global::isAuthenticated'],
+        policies: [],
       },
     },
   ],

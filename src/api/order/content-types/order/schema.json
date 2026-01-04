@@ -47,8 +47,7 @@
     "discount_code": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "api::discount-code.discount-code",
-      "inversedBy": "orders"
+      "target": "api::discount-code.discount-code"
     },
     "payment_status": {
       "type": "enumeration",

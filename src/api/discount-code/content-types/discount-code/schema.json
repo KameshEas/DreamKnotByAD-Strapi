@@ -15,7 +15,6 @@
     "code": {
       "type": "string",
       "required": true,
-      "unique": true,
       "validation": {
         "minLength": 3,
         "maxLength": 20,
@@ -101,8 +100,7 @@
     "applies_to_categories": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::category.category",
-      "inversedBy": "discount_codes"
+      "target": "api::category.category"
     },
     "customer_limit": {
       "type": "integer",

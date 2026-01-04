@@ -564,6 +564,74 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDiscountCodeDiscountCode
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'discount_codes';
+  info: {
+    description: 'Discount codes and promotions for orders';
+    displayName: 'Discount Code';
+    pluralName: 'discount-codes';
+    singularName: 'discount-code';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    applies_to: Schema.Attribute.Enumeration<
+      ['all_products', 'specific_products', 'categories']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'all_products'>;
+    applies_to_categories: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::category.category'
+    >;
+    applies_to_products: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::product.product'
+    >;
+    code: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customer_limit: Schema.Attribute.Integer;
+    customer_usage_count: Schema.Attribute.JSON &
+      Schema.Attribute.DefaultTo<'{}'>;
+    description: Schema.Attribute.Text;
+    discount_type: Schema.Attribute.Enumeration<
+      ['percentage', 'fixed_amount']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'percentage'>;
+    discount_value: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    exclude_sale_items: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    free_shipping: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    is_active: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::discount-code.discount-code'
+    > &
+      Schema.Attribute.Private;
+    maximum_discount: Schema.Attribute.Decimal;
+    minimum_order_value: Schema.Attribute.Decimal;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    usage_count: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    usage_limit: Schema.Attribute.Integer;
+    valid_from: Schema.Attribute.DateTime;
+    valid_until: Schema.Attribute.DateTime;
+  };
+}
+
 export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   collectionName: 'globals';
   info: {
@@ -608,40 +676,74 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    abandoned_cart: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    abandoned_cart_reason: Schema.Attribute.Enumeration<
+      ['cart_timeout', 'payment_failed', 'user_left', 'price_changed']
+    >;
+    actual_delivery_date: Schema.Attribute.DateTime;
     billing_address: Schema.Attribute.Text & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     discount_amount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
-    discount_code: Schema.Attribute.String;
+    discount_code: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::discount-code.discount-code'
+    >;
+    estimated_delivery_date: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;
     notes: Schema.Attribute.Text;
+    order_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    order_history: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<'[]'>;
     order_items: Schema.Attribute.Component<'order.order-item', true>;
+    order_source: Schema.Attribute.Enumeration<
+      ['web', 'mobile', 'api', 'admin_panel']
+    >;
     order_status: Schema.Attribute.Enumeration<
       [
         'pending',
+        'confirmed',
         'processing',
         'in_production',
+        'quality_check',
         'shipped',
+        'out_for_delivery',
         'delivered',
         'cancelled',
+        'returned',
+        'refunded',
       ]
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'pending'>;
+    payment_method: Schema.Attribute.Enumeration<
+      ['razorpay', 'cod', 'paypal', 'stripe', 'bank_transfer']
+    >;
     payment_status: Schema.Attribute.Enumeration<
-      ['pending', 'paid', 'failed']
+      ['pending', 'paid', 'failed', 'refunded']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'pending'>;
+    payment_transaction_id: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     razorpay_order_id: Schema.Attribute.String;
     razorpay_payment_id: Schema.Attribute.String;
+    refund_reason: Schema.Attribute.Text;
+    refunded_amount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    return_date: Schema.Attribute.DateTime;
+    return_policy_applied: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     shipping_address: Schema.Attribute.Text & Schema.Attribute.Required;
+    shipping_amount: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    subtotal: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    tax_amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
     total_amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
     tracking_number: Schema.Attribute.String;
+    tracking_status: Schema.Attribute.Text;
+    tracking_url: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -649,6 +751,77 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+  };
+}
+
+export interface ApiProductReviewProductReview
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_reviews';
+  info: {
+    description: 'Customer reviews and ratings for products';
+    displayName: 'Product Review';
+    pluralName: 'product-reviews';
+    singularName: 'product-review';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    cons: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customer: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    helpful_votes: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    images: Schema.Attribute.Media<'images', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-review.product-review'
+    > &
+      Schema.Attribute.Private;
+    product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
+    pros: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      >;
+    review_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    review_text: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 2000;
+        minLength: 10;
+      }>;
+    status: Schema.Attribute.Enumeration<['pending', 'approved', 'rejected']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+        minLength: 5;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    verified_purchase: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
   };
 }
 
@@ -664,6 +837,9 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    allow_backorders: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    averageRating: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
     category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -672,8 +848,14 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       ['two_day', 'standard', 'express']
     >;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
+    digital_file: Schema.Attribute.Media<'files'>;
     dimensions: Schema.Attribute.Text;
+    discount_codes: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::discount-code.discount-code'
+    >;
     discounted_price: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    ean: Schema.Attribute.String & Schema.Attribute.Unique;
     featured: Schema.Attribute.Boolean;
     images: Schema.Attribute.Media<'images', true>;
     is_available: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
@@ -685,16 +867,40 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     low_stock_threshold: Schema.Attribute.Integer &
       Schema.Attribute.DefaultTo<5>;
+    meta_description: Schema.Attribute.Text;
+    meta_keywords: Schema.Attribute.Text;
     original_price: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    product_type: Schema.Attribute.Enumeration<
+      ['physical', 'digital', 'service']
+    > &
+      Schema.Attribute.DefaultTo<'physical'>;
     publishedAt: Schema.Attribute.DateTime;
-    sku: Schema.Attribute.String & Schema.Attribute.Unique;
+    ratingCount: Schema.Attribute.JSON &
+      Schema.Attribute.DefaultTo<'{"1": 0, "2": 0, "3": 0, "4": 0, "5": 0}'>;
+    requires_shipping: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    reviewCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    reviews: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-review.product-review'
+    >;
+    sku: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     slug: Schema.Attribute.UID<'title'>;
     stock_quantity: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    tags: Schema.Attribute.Text;
+    taxable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    track_inventory: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    upc: Schema.Attribute.String & Schema.Attribute.Unique;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     weight: Schema.Attribute.Decimal;
+    weight_unit: Schema.Attribute.Enumeration<['kg', 'g', 'lb', 'oz']> &
+      Schema.Attribute.DefaultTo<'g'>;
   };
 }
 
@@ -1212,8 +1418,10 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
+      'api::discount-code.discount-code': ApiDiscountCodeDiscountCode;
       'api::global.global': ApiGlobalGlobal;
       'api::order.order': ApiOrderOrder;
+      'api::product-review.product-review': ApiProductReviewProductReview;
       'api::product.product': ApiProductProduct;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

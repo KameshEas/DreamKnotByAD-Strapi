@@ -131,8 +131,7 @@
     "reviews": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::product-review.product-review",
-      "inversedBy": "product"
+      "target": "api::product-review.product-review"
     },
     "averageRating": {
       "type": "decimal",

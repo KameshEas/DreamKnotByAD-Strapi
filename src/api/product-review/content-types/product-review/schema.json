@@ -52,8 +52,7 @@
     "customer": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "product_reviews"
+      "target": "plugin::users-permissions.user"
     },
     "product": {
       "type": "relation",
