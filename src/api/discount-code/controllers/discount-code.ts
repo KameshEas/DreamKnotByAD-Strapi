@@ -1,6 +1,6 @@
 import { factories } from '@strapi/strapi';
 
-export default {
+export default factories.createCoreController('api::discount-code.discount-code', ({ strapi }) => ({
   async validate(ctx: any) {
     const { code } = ctx.params;
     const { orderData } = ctx.request.body;
@@ -100,4 +100,4 @@ export default {
       });
     }
   }
-};
+}));

@@ -1,6 +1,6 @@
 import { factories } from '@strapi/strapi';
 
-export default {
+export default factories.createCoreService('api::discount-code.discount-code', ({ strapi }) => ({
   async validateDiscountCode(code: string, orderData: any) {
     const discountCode = await strapi.db.query('api::discount-code.discount-code').findOne({
       where: {
@@ -144,4 +144,4 @@ export default {
       }
     });
   }
-};
+}));
